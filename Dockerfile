@@ -1,20 +1,40 @@
 FROM php:8.3-cli
 
+# Install dependency sistem
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
-    libzip-dev
+    libzip-dev \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install pdo pdo_mysql zip
+# Install ekstensi PHP
+RUN docker-php-ext-install \
+    pdo \
+    pdo_mysql \
+    pdo_pgsql \
+    zip
 
+# Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# Working directory
 WORKDIR /app
 
+# Copy source code
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader
+# Install dependency Laravel
+RUN composer install \
+    --no-dev \
+    --optimize-autoloader \
+    --no-interaction
 
-RUN chmod -R 775 storage bootstrap/cache
+# Permission
+RUN chmod -R 775 storage bootstrap/cache || true
 
-CMD php artisan serve --host=0.0.0.0 --port=${PORT}
+# Railway menggunakan PORT dari environment
+EXPOSE 8080
+
+# Jalankan Laravel
+CMD php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
