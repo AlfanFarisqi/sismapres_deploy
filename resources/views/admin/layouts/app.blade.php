@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <title>Sistem Penunjang Keputusan (SPK)</title>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/LOGO UNP Kediri.png') }}">
+    <style>
+        .title-logo {
+            height: 35px;
+            width: auto;
+            margin-right: 12px;
+            vertical-align: middle;
+        }
+    </style>
+    @stack('styles')
+</head>
+
+<body>
+
+    <!-- Topbar -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <img src="{{ asset('assets/img/LOGO UNP Kediri.png') }}" alt="Logo UNP" class="logo-img"
+                onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=UNP&background=355872&color=fff&rounded=true';">
+            <div class="topbar-text">
+                <div class="univ-name">UNIVERSITAS NUSANTARA PGRI KEDIRI</div>
+                <div class="app-name">Sistem Penunjang Keputusan (SPK) Seleksi Mahasiswa Berprestasi</div>
+                <div class="app-sub">Berbasis Metode TOPSIS</div>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <div class="user-profile">
+                <div class="d-flex flex-column align-items-end me-2">
+                    <span class="user-name fw-bold">{{ auth()->user()->name }}</span>
+                    <small class="text-muted" style="font-size: 10px;">{{ strtoupper(auth()->user()->role) }}</small>
+                </div>
+                <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=355872&color=fff&rounded=true" alt="User" class="avatar">
+            </div>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header-box">
+                <i class="fa-solid fa-laptop"></i>
+                <span>Admin</span>
+            </div>
+
+            <ul class="menu">
+                <li class="{{ request()->is('admin/dashboard') ? 'active' : '' }}"><a href="{{ route('admin.dashboard') }}"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+                <li class="{{ request()->is('admin/mahasiswa*') ? 'active' : '' }}"><a href="{{ route('admin.mahasiswa.index') }}"><i class="fa-solid fa-graduation-cap"></i> Data Mahasiswa</a></li>
+                <li class="{{ request()->is('admin/kriteria*') ? 'active' : '' }}"><a href="{{ route('admin.kriteria.index') }}"><i class="fa-solid fa-list-check"></i> Data Kriteria</a></li>
+                <li class="{{ request()->is('admin/data-penilaian*') ? 'active' : '' }}"><a href="{{ route('admin.data-penilaian.input') }}"><i class="fa-solid fa-laptop"></i> Data Penilaian</a></li>
+                <li class="{{ request()->is('admin/upload-berkas*') ? 'active' : '' }}"><a href="{{ route('admin.upload-berkas.index') }}"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Berkas</a></li>
+                <li class="{{ request()->is('admin/hasil-seleksi*') ? 'active' : '' }}"><a href="{{ route('admin.hasil-seleksi.index') }}"><i class="fa-solid fa-trophy"></i> Hasil Seleksi</a></li>
+                <li class="{{ request()->is('admin/manajemen-user*') ? 'active' : '' }}"><a href="{{ route('admin.manajemen-user.index') }}"><i class="fa-solid fa-users"></i> Manajemen User</a></li>
+                <li>
+                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="fa-solid fa-power-off"></i> Logout
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                </li>   
+            </ul>
+        </aside>
+
+        <!-- Main -->
+        <main class="main">
+            @yield('content')
+        </main>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
