@@ -87,7 +87,8 @@ trait TopsisCalculator
         $preferences = [];
         foreach ($mahasiswas as $m) {
             $totalDist = $distPositive[$m->id] + $distNegative[$m->id];
-            $preferences[$m->id] = $totalDist != 0 ? $distNegative[$m->id] / $totalDist : 0;
+            // Jika totalDist 0 (biasanya karena hanya ada 1 mahasiswa atau semua nilainya persis sama), set skor jadi 1.000
+            $preferences[$m->id] = $totalDist != 0 ? $distNegative[$m->id] / $totalDist : 1;
         }
 
         // 7. Simpan Hasil dan Ranking
