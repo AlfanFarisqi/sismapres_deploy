@@ -36,5 +36,8 @@ RUN chmod -R 775 storage bootstrap/cache || true
 # Railway menggunakan PORT dari environment
 EXPOSE 8080
 
+# Buat symlink storage
+RUN php artisan storage:link
+
 # Jalankan Laravel
 CMD php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
